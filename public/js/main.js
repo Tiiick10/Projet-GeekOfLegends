@@ -243,7 +243,7 @@ if (currentBoss.health <= currentBoss.health * 0.2) {
 // Poser l'énigme
 
 function askBossRiddle() {
-  
+
   let riddles = [
 
       { question: "Quel est le plus grand océan de la Terre?", answer: "Pacifique" },
@@ -269,6 +269,10 @@ function askBossRiddle() {
   }
 
 }
+
+// Lancement du jeu
+
+document.getElementById('start-game').addEventListener('click', startGame)
 
 
 
