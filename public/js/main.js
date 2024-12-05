@@ -58,7 +58,7 @@ class Hero {
               this.arrows -= 2 // Réduire les flèches
 
           } else {
-            
+
               this.arrows += 6 // Récupérer des flèches
               damage = 0
           }
@@ -112,3 +112,8 @@ let heroes = [
   new Hero('Archer', 'archer', 20, 40)
 
 ]
+
+// Variables de jeu
+
+let currentBoss
+let isGameRunning = false
