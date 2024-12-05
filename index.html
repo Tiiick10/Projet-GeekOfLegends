@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="fr">
 
 <head>
@@ -12,18 +11,91 @@
 </head>
 
 <body>
-
     <div id="game-container">
 
         <h1>Welcome to GeekOfLegends</h1>
+
+        <!-- Création des héros -->
+
+        <form id="create-heroes-form">
+            <div id="hero-setup">
+
+                <!-- Guerrier -->
+
+                <div class="hero-column">
+                    <h3>Guerrier</h3>
+                    <label for="hero1-name">Nom du Guerrier:</label>
+                    <input type="text" id="hero1-name" required><br>
+                    <label for="hero1-health">Vie du Guerrier:</label>
+                    <input type="number" id="hero1-health" required><br>
+                    <label for="hero1-attack">Attaque du Guerrier:</label>
+                    <input type="number" id="hero1-attack" required><br>
+                </div>
+
+                <!-- Mage -->
+
+                <div class="hero-column">
+                    <h3>Mage</h3>
+                    <label for="hero2-name">Nom du Mage:</label>
+                    <input type="text" id="hero2-name" required><br>
+                    <label for="hero2-health">Vie du Mage:</label>
+                    <input type="number" id="hero2-health" required><br>
+                    <label for="hero2-attack">Attaque du Mage:</label>
+                    <input type="number" id="hero2-attack" required><br>
+                </div>
+
+                <!-- Archer -->
+
+                <div class="hero-column">
+                    <h3>Archer</h3>
+                    <label for="hero3-name">Nom de l'Archer:</label>
+                    <input type="text" id="hero3-name" required><br>
+                    <label for="hero3-health">Vie de l'Archer:</label>
+                    <input type="number" id="hero3-health" required><br>
+                    <label for="hero3-attack">Attaque de l'Archer:</label>
+                    <input type="number" id="hero3-attack" required><br>
+                </div>
+            </div>
+            <button type="submit">Créer les héros</button>
+        </form>
+
+        <!-- Zone de démarrage du jeu -->
+
         <div id="game-log"></div>
-        <div id="hero-setup">
-            <button id="start-game">Commencer le jeu</button>
+        <div id="start-game" style="display: none;">
+            <button>Commencer le jeu</button>
+        </div>
+
+        <!-- Zone d'affichage du boss -->
+
+        <div id="boss-info">
+            <p id="boss-name"></p>
+            <div id="health-bar-boss" style="width: 100%; background-color: red; height: 20px;"></div>
+        </div>
+
+        <!-- Informations héros -->
+
+        <div id="heroes-info">
+            <div class="hero-info" id="hero-info-Guerrier">
+                <div>Guerrier</div>
+                <div id="health-bar-Guerrier" style="width: 100%; background-color: green; height: 20px;"></div>
+                <div id="rage-bar-Guerrier" style="width: 0%; background-color: orange; height: 20px;"></div>
+            </div>
+            <div class="hero-info" id="hero-info-Mage">
+                <div>Mage</div>
+                <div id="health-bar-Mage" style="width: 100%; background-color: green; height: 20px;"></div>
+                <div id="mana-bar-Mage" style="width: 100%; background-color: blue; height: 20px;"></div>
+            </div>
+            <div class="hero-info" id="hero-info-Archer">
+                <div>Archer</div>
+                <div id="health-bar-Archer" style="width: 100%; background-color: green; height: 20px;"></div>
+                <div id="arrows-bar-Archer" style="width: 100%; background-color: yellow; height: 20px;"></div>
+            </div>
         </div>
 
     </div>
 
     <script src="./public/js/main.js"></script>
-
 </body>
+
 </html>
