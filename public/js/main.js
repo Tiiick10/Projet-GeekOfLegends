@@ -232,6 +232,13 @@ function checkGameStatus() {
 
 }
 
+  // Enigme du boss
+
+  if (currentBoss.health <= currentBoss.health * 0.2) {
+
+    askBossRiddle()
+}
+
 
 
 
