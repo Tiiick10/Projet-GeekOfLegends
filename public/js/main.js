@@ -179,7 +179,7 @@ function nextTurn() {
 
           }
       }
-      
+
   })
 
   if (currentBoss.health <= 0) {
@@ -192,6 +192,26 @@ function nextTurn() {
 
   attackHero()
   checkGameStatus()
+
+}
+
+
+// Attaque de boss
+
+function attackHero() {
+
+  let livingHeroes = heroes.filter(hero => hero.health > 0)
+  let randomHero = livingHeroes[Math.floor(Math.random() * livingHeroes.length)]
+
+  let damage = currentBoss.attackHero(randomHero)
+
+  updateGameLog(`${currentBoss.name} attaque ${randomHero.name} et inflige ${damage} dégâts.`)
+
+  if (randomHero.health <= 0) {
+
+      updateGameLog(`${randomHero.name} est mort.`)
+
+  }
 
 }
 
