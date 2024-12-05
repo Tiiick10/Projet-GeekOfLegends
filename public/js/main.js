@@ -4,16 +4,73 @@ class Hero {
 
   constructor(name, role, attack, health, posture = 'attaque') {
 
-      this.name = name;
-      this.role = role;
-      this.attack = attack;
-      this.health = health;
-      this.posture = posture;
-      this.rage = 0; // Guerrier
-      this.mana = 7; // Mage
-      this.arrows = 6; // Archer
+      this.name = name
+      this.role = role
+      this.attack = attack
+      this.health = health
+      this.posture = posture
+      this.rage = 0 // Guerrier
+      this.mana = 7 // Mage
+      this.arrows = 6 // Archer
 
   }
 
 }
+
+// Attaque
+
+attackBoss(); {
+
+  let damage = this.attack;
+  
+  if (this.role === 'guerrier') {
+
+      // Le Guerrier = rage
+
+      if (this.rage >= 4) {
+
+          damage *= 1.25 // Augmenter les dégâts de 25%
+          this.rage = 0 // Réinitialiser la rage
+
+      } else {
+
+          this.rage += 1 // +1 point de rage à chaque tour
+
+      }
+
+  } else if (this.role === 'mage') {
+
+      // Le Mage = mana
+
+      if (this.mana >= 2) {
+          this.mana -= 2 // Réduire la mana
+
+      } else {
+
+          this.mana += 7 // Récupérer du mana
+          damage = 0 // Le Mage ne fait pas de dégâts s'il n'a pas assez de mana
+
+      }
+
+  } else if (this.role === 'archer') {
+
+      // L'archer utilise des flèches
+
+      if (this.arrows >= 2) {
+          this.arrows -= 2 // Réduire les flèches
+
+      } else {
+
+          this.arrows += 6 // Récupérer des flèches
+          damage = 0 // L'archer ne fait pas de dégâts s'il n'a pas assez de flèches
+
+      }
+
+  }
+  
+  return damage
+
+}
+
+
   
