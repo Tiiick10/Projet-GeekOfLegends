@@ -148,5 +148,16 @@ function displayHeroes() {
 
 }
 
+// Mettre à jour les logs du jeu
+
+function updateGameLog(message) {
+
+  let gameLog = document.getElementById('game-log')
+  gameLog.innerHTML += `<p>${message}</p>`
+
+}
+
+
+
 
 
