@@ -157,6 +157,43 @@ function updateGameLog(message) {
 
 }
 
+// Fonction pour gérer le tour suivant
+
+function nextTurn() {
+
+  if (!isGameRunning) return
+
+  heroes.forEach(hero => {
+
+      if (hero.health > 0) {
+          let damage = hero.attackBoss()
+
+          if (damage > 0) {
+
+              currentBoss.health -= damage
+              updateGameLog(`${hero.name} attaque ${currentBoss.name} et inflige ${damage} dégâts.`)
+
+          } else {
+
+              updateGameLog(`${hero.name} ne peut pas attaquer ce tour (pas de ressources).`)
+
+          }
+      }
+      
+  })
+
+  if (currentBoss.health <= 0) {
+
+      updateGameLog(`Le boss ${currentBoss.name} est vaincu ! Vous avez gagné !`)
+      isGameRunning = false
+      return
+
+  }
+
+  attackHero()
+  checkGameStatus()
+
+}
 
 
 
