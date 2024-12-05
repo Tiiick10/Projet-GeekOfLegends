@@ -133,3 +133,20 @@ function startGame() {
 
 }
 
+// Afficher les héros
+
+function displayHeroes() {
+
+  let gameLog = document.getElementById('game-log')
+  gameLog.innerHTML += '<h2>Héros : </h2>'
+
+  heroes.forEach(hero => {
+
+      gameLog.innerHTML += `<p>${hero.name} (${hero.role}) - Santé: ${hero.health} - Attaque: ${hero.attack}</p>`
+
+  })
+
+}
+
+
+
