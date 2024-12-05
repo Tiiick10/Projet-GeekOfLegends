@@ -215,6 +215,24 @@ function attackHero() {
 
 }
 
+// Vérification de la fin du jeu
+
+function checkGameStatus() {
+
+  let livingHeroes = heroes.filter(hero => hero.health > 0)
+
+  if (livingHeroes.length === 0) {
+
+      updateGameLog("Tous les héros sont morts. Vous avez perdu.")
+      isGameRunning = false
+
+      return
+
+  }
+
+}
+
+
 
 
 
