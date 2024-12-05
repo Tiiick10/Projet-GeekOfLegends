@@ -232,12 +232,46 @@ function checkGameStatus() {
 
 }
 
-  // Enigme du boss
+// Enigme du boss
 
-  if (currentBoss.health <= currentBoss.health * 0.2) {
+if (currentBoss.health <= currentBoss.health * 0.2) {
 
-    askBossRiddle()
+  askBossRiddle()
+
 }
+
+// Poser l'énigme
+
+function askBossRiddle() {
+  
+  let riddles = [
+
+      { question: "Quel est le plus grand océan de la Terre?", answer: "Pacifique" },
+      { question: "Quel est le plus grand pays du monde?", answer: "Russie" },
+      { question: "Qui a écrit 'Les Misérables'?", answer: "Victor Hugo" }
+
+  ]
+  
+  let randomRiddle = riddles[Math.floor(Math.random() * riddles.length)]
+
+  let answer = prompt(randomRiddle.question)
+  
+  if (answer && answer.toLowerCase() === randomRiddle.answer.toLowerCase()) {
+
+      updateGameLog("Bravo ! Vous avez vaincu le boss avec l'énigme !")
+      isGameRunning = false
+
+  } else {
+
+      updateGameLog("Mauvaise réponse. Vous avez perdu.")
+      isGameRunning = false
+
+  }
+
+}
+
+
+
 
 
 
