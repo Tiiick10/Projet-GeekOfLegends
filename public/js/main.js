@@ -12,7 +12,7 @@ class Hero {
       this.rage = 0 // Guerrier
       this.mana = 7 // Mage
       this.arrows = 6 // Archer
-      
+
   }
 
   // Attaque
@@ -56,7 +56,9 @@ class Hero {
 
           if (this.arrows >= 2) {
               this.arrows -= 2 // Réduire les flèches
+
           } else {
+            
               this.arrows += 6 // Récupérer des flèches
               damage = 0
           }
@@ -90,3 +92,23 @@ class Boss {
   }
 
 }
+
+// Définition des Boss
+
+let bosses = [
+
+  new Boss('Sauron', 30 + Math.floor(Math.random() * 20), 200 + Math.floor(Math.random() * 100)),
+  new Boss('Chronos', 25 + Math.floor(Math.random() * 20), 180 + Math.floor(Math.random() * 100)),
+  new Boss('Lilith', 35 + Math.floor(Math.random() * 20), 220 + Math.floor(Math.random() * 100)),
+
+]
+
+// Définition des Héros
+
+let heroes = [
+
+  new Hero('Guerrier', 'guerrier', 30, 50),
+  new Hero('Mage', 'mage', 25, 40),
+  new Hero('Archer', 'archer', 20, 40)
+
+]
