@@ -93,7 +93,7 @@ class Boss {
 
 }
 
-// Définition des Boss
+// Les Boss
 
 let bosses = [
 
@@ -103,7 +103,7 @@ let bosses = [
 
 ]
 
-// Définition des Héros
+// Les Héros
 
 let heroes = [
 
@@ -113,7 +113,23 @@ let heroes = [
 
 ]
 
-// Variables de jeu
+// Variables
 
 let currentBoss
 let isGameRunning = false
+
+// Démarrer le jeu
+
+function startGame() {
+
+  isGameRunning = true
+  currentBoss = bosses[Math.floor(Math.random() * bosses.length)]
+
+  updateGameLog(`Le boss ${currentBoss.name} est apparu !`)
+  displayHeroes()
+  document.getElementById('hero-setup').innerHTML = '<button id="next-turn">Prochain tour</button>'
+
+  document.getElementById('next-turn').addEventListener('click', nextTurn)
+
+}
+
