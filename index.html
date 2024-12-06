@@ -1,101 +1,120 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GeekOfLegends</title>
     <link rel="stylesheet" href="./public/css/style.css">
-
 </head>
-
 <body>
-    <div id="game-container">
+    <header>
 
         <h1>Welcome to GeekOfLegends</h1>
 
+    </header>
+
+
+    <main>
+
         <!-- Création des héros -->
 
-        <form id="create-heroes-form">
-            <div id="hero-setup">
+        <section id="hero-creation" aria-label="Création des héros">
+
+            <h2>Créer vos Héros</h2>
+
+            <div class="grid-container">
 
                 <!-- Guerrier -->
 
                 <div class="hero-column">
+
                     <h3>Guerrier</h3>
-                    <label for="hero1-name">Nom du Guerrier:</label>
-                    <input type="text" id="hero1-name" required><br>
-                    <label for="hero1-health">Vie du Guerrier:</label>
-                    <input type="number" id="hero1-health" required><br>
-                    <label for="hero1-attack">Attaque du Guerrier:</label>
-                    <input type="number" id="hero1-attack" required><br>
+
+                    <label for="guerrier-name">Nom :</label>
+                    <input type="text" id="guerrier-name" placeholder="Nom du Guerrier">
+                    <label for="guerrier-hp">Points de vie :</label>
+                    <input type="number" id="guerrier-hp" min="1" placeholder="Points de vie du Guerrier">
+                    <label for="guerrier-attack">Points d'attaque :</label>
+                    <input type="number" id="guerrier-attack" min="1" placeholder="Points d'attaque du Guerrier">
+                    <label for="guerrier-posture">Posture :</label>
+                    <select id="guerrier-posture">
+
+                        <option value="attaque">Attaque (+25% de degats)</option>
+                        <option value="défense">Défense (50% des dégats sont réduits)</option>
+
+                    </select>
+
                 </div>
 
                 <!-- Mage -->
 
                 <div class="hero-column">
+
                     <h3>Mage</h3>
-                    <label for="hero2-name">Nom du Mage:</label>
-                    <input type="text" id="hero2-name" required><br>
-                    <label for="hero2-health">Vie du Mage:</label>
-                    <input type="number" id="hero2-health" required><br>
-                    <label for="hero2-attack">Attaque du Mage:</label>
-                    <input type="number" id="hero2-attack" required><br>
+
+                    <label for="mage-name">Nom :</label>
+                    <input type="text" id="mage-name" placeholder="Nom du Mage">
+                    <label for="mage-hp">Points de vie :</label>
+                    <input type="number" id="mage-hp" min="1" placeholder="Points de vie du Mage">
+                    <label for="mage-attack">Points d'attaque :</label>
+                    <input type="number" id="mage-attack" min="1" placeholder="Points d'attaque du Mage">
+                    <label for="mage-posture">Posture :</label>
+                    <select id="mage-posture">
+
+                        <option value="attaque">Attaque (+25% de degats)</option>
+                        <option value="défense">Défense (50% des dégats sont réduits)</option>
+
+                    </select>
+
                 </div>
 
                 <!-- Archer -->
 
                 <div class="hero-column">
+
                     <h3>Archer</h3>
-                    <label for="hero3-name">Nom de l'Archer:</label>
-                    <input type="text" id="hero3-name" required><br>
-                    <label for="hero3-health">Vie de l'Archer:</label>
-                    <input type="number" id="hero3-health" required><br>
-                    <label for="hero3-attack">Attaque de l'Archer:</label>
-                    <input type="number" id="hero3-attack" required><br>
+
+                    <label for="archer-name">Nom :</label>
+                    <input type="text" id="archer-name" placeholder="Nom de l'Archer">
+                    <label for="archer-hp">Points de vie :</label>
+                    <input type="number" id="archer-hp" min="1" placeholder="Points de vie de l'Archer">
+                    <label for="archer-attack">Points d'attaque :</label>
+                    <input type="number" id="archer-attack" min="1" placeholder="Points d'attaque de l'Archer">
+
+                    <label for="archer-posture">Posture :</label>
+
+                    <select id="archer-posture">
+
+                        <option value="attaque">Attaque (+25% de degats)</option>
+                        <option value="défense">Défense (50% des dégats sont réduits)</option>
+
+                    </select>
+
                 </div>
+
             </div>
-            <button type="submit">Créer les héros</button>
-        </form>
 
-        <!-- Zone de démarrage du jeu -->
+            <button id="start-game">Démarrer le Jeu</button>
 
-        <div id="game-log"></div>
-        <div id="start-game" style="display: none;">
-            <button>Commencer le jeu</button>
-        </div>
+        </section>
 
-        <!-- Zone d'affichage du boss -->
+        <!-- Section du jeu -->
 
-        <div id="boss-info">
-            <p id="boss-name"></p>
-            <div id="health-bar-boss" style="width: 100%; background-color: red; height: 20px;"></div>
-        </div>
+        <section id="game-board" aria-label="Tableau de jeu">
 
-        <!-- Informations héros -->
+            <h2>Combat</h2>
 
-        <div id="heroes-info">
-            <div class="hero-info" id="hero-info-Guerrier">
-                <div>Guerrier</div>
-                <div id="health-bar-Guerrier" style="width: 100%; background-color: green; height: 20px;"></div>
-                <div id="rage-bar-Guerrier" style="width: 0%; background-color: orange; height: 20px;"></div>
-            </div>
-            <div class="hero-info" id="hero-info-Mage">
-                <div>Mage</div>
-                <div id="health-bar-Mage" style="width: 100%; background-color: green; height: 20px;"></div>
-                <div id="mana-bar-Mage" style="width: 100%; background-color: blue; height: 20px;"></div>
-            </div>
-            <div class="hero-info" id="hero-info-Archer">
-                <div>Archer</div>
-                <div id="health-bar-Archer" style="width: 100%; background-color: green; height: 20px;"></div>
-                <div id="arrows-bar-Archer" style="width: 100%; background-color: yellow; height: 20px;"></div>
-            </div>
-        </div>
+            <div id="combat-info"> </div>
 
-    </div>
+            <div id="combat-log" aria-live="polite"></div>
+
+            <button id="next-round">Tour suivant</button>
+
+        </section>
+        
+
+    </main>
 
     <script src="./public/js/main.js"></script>
 </body>
-
 </html>

@@ -1,234 +1,247 @@
-// Classe de Héros
+// Création des classes Boss et Hero
 
 class Hero {
 
-  constructor(name, role, attack, health, element = null) {
-      this.name = name;
-      this.role = role;
-      this.attack = attack;
-      this.health = health;
-      this.element = element; // Attribut élémentaire du Mage
-      this.rage = 0;
-      this.mana = 7;
-      this.arrows = 6;
-  }
+    constructor(name, hp, attack, role, posture) {
+        this.name = name
+        this.health = hp
+        this.attack = attack
+        this.role = role
+        this.posture = posture
 
-  // Attaque du boss
+    }
 
-  attackBoss() {
-      let damage = this.attack;
-      if (this.role === 'guerrier' && this.rage >= 4) {
-          damage *= 1.25; // Attaque critique
-          this.rage = 0;
-      }
-      if (this.role === 'mage' && this.mana >= 2) {
-          this.mana -= 2;
-      }
-      if (this.role === 'archer' && this.arrows >= 2) {
-          this.arrows -= 2;
-          if (Math.random() < 0.25) { // Attaque critique de l'archer
-              damage *= 1.5;
-          }
-      }
-      return damage;
-  }
+    attackBoss(boss) {
+
+        let damage = this.attack 
+        if (this.posture === 'attaque') damage *= 1.2 
+        if (this.posture === 'défense') damage *= 0.5
+        
+        // Attaque critique de l'archer
+
+        if (this.role === 'archer' && this.arrows >= 2) {
+            this.arrows -= 2 
+            if (Math.random() < 0.25) { 
+                damage *= 1.5 
+            }
+        }
+
+        //
+
+        boss.health = Math.max(0, boss.health - damage) 
+        return `<div>${this.name} attaque ${boss.name} et inflige ${damage.toFixed(2)} dégâts.</div>` 
+
+    }
 }
 
-// Classe du Boss
-
 class Boss {
-  constructor(name, attack, health, element) {
-      this.name = name;
-      this.attack = attack;
-      this.health = health;
-      this.element = element; // Attribut élémentaire du Boss
-  }
 
-  // Attaque un héro
+    constructor(name, hp, attack, element) {
+        this.name = name 
+        this.health = hp 
+        this.attack = attack 
+        this.element = element 
 
-  attackHero(hero) {
-      let damage = this.attack;
-      hero.health -= damage;
-      return damage;
-  }
+    }
+
+    attackHero(hero) {
+
+        if (hero.health <= 0) return `<div>${hero.name} est déjà hors combat.</div>` 
+        
+        hero.health = Math.max(0, hero.health - this.attack) 
+        return `<div>${this.name} attaque ${hero.name} et inflige ${this.attack} dégâts.</div>` 
+
+    }
+}
+
+// Fonction pour créer un boss
+
+function createBoss() {
+
+    let bossNames = ['Le Dragon', 'Le Géant', 'L\'Archimage'] 
+    let bossHealth = Math.floor(Math.random() * 1000) + 50 
+    let bossAttack = Math.floor(Math.random() * 20) + 10 
+    let bossElement = ['Feu', 'Glace', 'Terre'][Math.floor(Math.random() * 3)] 
+    return new Boss(bossNames[Math.floor(Math.random() * bossNames.length)], bossHealth, bossAttack, bossElement) 
+
+}
+
+// Mise à jour des barres de vie avec vérification
+
+function updateHealthBars(hero, elementId) {
+
+    console.log(`Mise à jour de la barre de vie pour ${elementId}`) 
+    let healthBar = document.getElementById(elementId) 
+    if (!healthBar) {
+        console.error(`Élément introuvable : ${elementId}`) 
+        return 
+    }
+    healthBar.style.width = `${Math.max(0, hero.health)}%`
+
 }
 
 // Fonction pour répartir les points de vie et d'attaque
 
 function distributeStats() {
-  let totalHealth = 150;
-  let totalAttack = 120;
+    let totalHealth = 150 
+    let totalAttack = 120 
+    
+    // Obtenir les valeurs entrées par l'utilisateur
   
-  // Obtenir les valeurs entrées par l'utilisateur
-
-  let hero1Health = parseInt(document.getElementById('hero1-health').value);
-  let hero2Health = parseInt(document.getElementById('hero2-health').value);
-  let hero3Health = parseInt(document.getElementById('hero3-health').value);
-
-  let hero1Attack = parseInt(document.getElementById('hero1-attack').value);
-  let hero2Attack = parseInt(document.getElementById('hero2-attack').value);
-  let hero3Attack = parseInt(document.getElementById('hero3-attack').value);
-
-  // Vérification que la somme des points de vie et attaque est correcte
-
-  if (hero1Health + hero2Health + hero3Health === totalHealth &&
-      hero1Attack + hero2Attack + hero3Attack === totalAttack) {
-
-      // Créer les héros avec les attributs donnés par l'utilisateur
-
-      heroes = [
-          new Hero(document.getElementById('hero1-name').value, 'guerrier', hero1Attack, hero1Health),
-          new Hero(document.getElementById('hero2-name').value, 'mage', hero2Attack, hero2Health),
-          new Hero(document.getElementById('hero3-name').value, 'archer', hero3Attack, hero3Health)
-      ];
-
-      // Lancer le jeu après la création des héros
-
-      document.getElementById('start-game').style.display = 'inline';
-      document.getElementById('create-heroes-form').style.display = 'none';
-  } else {
-      alert('Les points de vie et d\'attaque doivent être répartis correctement.');
+    let hero1Health = parseInt(document.getElementById('hero1-health').value) 
+    let hero2Health = parseInt(document.getElementById('hero2-health').value) 
+    let hero3Health = parseInt(document.getElementById('hero3-health').value) 
+  
+    let hero1Attack = parseInt(document.getElementById('hero1-attack').value) 
+    let hero2Attack = parseInt(document.getElementById('hero2-attack').value) 
+    let hero3Attack = parseInt(document.getElementById('hero3-attack').value) 
+  
+    // Vérification que la somme des points de vie et attaque est correcte
+  
+    if (hero1Health + hero2Health + hero3Health === totalHealth &&
+        hero1Attack + hero2Attack + hero3Attack === totalAttack) {
+  
+        // Créer les héros avec les attributs donnés par l'utilisateur
+  
+        heroes = [
+            new Hero(document.getElementById('hero1-name').value, 'guerrier', hero1Attack, hero1Health),
+            new Hero(document.getElementById('hero2-name').value, 'mage', hero2Attack, hero2Health),
+            new Hero(document.getElementById('hero3-name').value, 'archer', hero3Attack, hero3Health)
+        ] 
+  
+        // Lancer le jeu après la création des héros
+  
+        document.getElementById('start-game').style.display = 'inline' 
+        document.getElementById('create-heroes-form').style.display = 'none' 
+    } else {
+        alert('Les points de vie et d\'attaque doivent être répartis correctement.') 
+    }
   }
+
+// Mise à jour des statuts
+
+function updateStatus(heroes, boss) {
+
+    try {
+        document.getElementById('guerrier-status').innerHTML = `${heroes.guerrier.name} (HP: ${heroes.guerrier.health})` 
+        document.getElementById('mage-status').innerHTML = `${heroes.mage.name} (HP: ${heroes.mage.health})` 
+        document.getElementById('archer-status').innerHTML = `${heroes.archer.name} (HP: ${heroes.archer.health})` 
+        document.getElementById('boss-name').innerHTML = `${boss.name} (HP: ${boss.health})` 
+
+        updateHealthBars(heroes.guerrier, 'guerrier-health-bar') 
+        updateHealthBars(heroes.mage, 'mage-health-bar') 
+        updateHealthBars(heroes.archer, 'archer-health-bar') 
+
+    } catch (error) {
+
+        console.error('Erreur dans updateStatus:', error) 
+
+    }
+
 }
 
-// Fonction pour démarrer le jeu
+// Initialisation du jeu
 
-function startGame() {
-  let bosses = [
-      new Boss('Sauron', 30, 200, 'Feu'),
-      new Boss('Chronos', 25, 180, 'Terre'),
-      new Boss('Lilith', 35, 220, 'Eau')
-  ];
+document.getElementById('start-game').addEventListener('click', () => {
 
-  // Choisir un boss aléatoire
+    // Vérification des champs remplis
 
-  currentBoss = bosses[Math.floor(Math.random() * bosses.length)];
-  updateGameLog(`Le boss ${currentBoss.name} est apparu !`);
+    if (!document.getElementById('guerrier-name').value || 
+        !document.getElementById('mage-name').value || 
+        !document.getElementById('archer-name').value) {
+        alert('Veuillez remplir tous les champs des héros.') 
+        return 
+    }
 
-  // Afficher les informations des héros
+    let heroes = {
 
-  heroes.forEach(hero => {
-      updateGameLog(`${hero.name} (${hero.role}) - Vie: ${hero.health}, Attaque: ${hero.attack}`);
-  });
+        guerrier: new Hero(
 
-  // Commencer le tour
+            document.getElementById('guerrier-name').value,
+            parseInt(document.getElementById('guerrier-hp').value),
+            parseInt(document.getElementById('guerrier-attack').value),
+            'guerrier',
+            document.getElementById('guerrier-posture').value
 
-  document.getElementById('start-game').addEventListener('click', nextTurn);
-}
+        ),
 
-// Fonction pour gérer les actions de chaque tour
+        mage: new Hero(
 
-function nextTurn() {
+            document.getElementById('mage-name').value,
+            parseInt(document.getElementById('mage-hp').value),
+            parseInt(document.getElementById('mage-attack').value),
+            'mage',
+            document.getElementById('mage-posture').value
 
-  // Les héros attaquent le boss
+        ),
 
-  heroes.forEach(hero => {
-      if (hero.health > 0) {
-          let damage = hero.attackBoss();
-          if (damage > 0) {
-              currentBoss.health -= damage;
-              updateGameLog(`${hero.name} attaque le boss et inflige ${damage} dégâts.`);
-          }
-      }
-  });
+        archer: new Hero(
 
-  // Le boss attaque un héro
+            document.getElementById('archer-name').value,
+            parseInt(document.getElementById('archer-hp').value),
+            parseInt(document.getElementById('archer-attack').value),
+            'archer',
+            document.getElementById('archer-posture').value
 
-  if (currentBoss.health > 0) {
-      let heroToAttack = heroes.filter(hero => hero.health > 0)[Math.floor(Math.random() * heroes.length)];
-      let damage = currentBoss.attackHero(heroToAttack);
-      updateGameLog(`Le boss attaque ${heroToAttack.name} et inflige ${damage} dégâts.`);
-  }
+        ),
+    } 
 
-  // Vérifier la fin du combat
+    let boss = createBoss() 
 
-  if (currentBoss.health <= 0) {
-      updateGameLog(`Le boss ${currentBoss.name} est vaincu ! Vous avez gagné.`);
-      return;
-  }
+    document.getElementById('game-board').style.display = 'block' // Affiche la section du combat
 
-  // Vérification des morts
+    let combatLog = document.getElementById('combat-log') 
+    let nextRoundButton = document.getElementById('next-round') 
 
-  heroes.forEach(hero => {
-      if (hero.health <= 0) {
-          updateGameLog(`${hero.name} est mort.`);
-      }
-  });
+    nextRoundButton.addEventListener('click', function nextRound() {
 
-  if (heroes.every(hero => hero.health <= 0)) {
-      updateGameLog("Tous vos héros sont morts. Vous avez perdu.");
-      return;
-  }
+        combatLog.innerHTML = `<div>--- Tour ${round} ---</div>` 
 
-  // Gérer l'énigme si le boss a moins de 20% de vie
+        // Attaque des héros
 
-  if (currentBoss.health <= 0.2 * 200) {
-      askRiddle();
-  }
+        for (let hero of Object.values(heroes)) {
 
-  // Mise à jour des barres de vie et ressources
+            if (hero.health > 0) combatLog.innerHTML += hero.attackBoss(boss) 
 
-  updateStatusBars();
-}
+        }
 
-// Fonction pour poser une énigme
+        // Vérifier si le boss est vaincu
 
-function askRiddle() {
-  let riddles = [
-      { question: "Quel est le plus grand océan ?", answer: "Pacifique" },
-      { question: "Quel est l'animal le plus rapide ?", answer: "Guépard" },
-      { question: "Combien de continents existent ?", answer: "7" }
-  ];
+        if (boss.health <= 0) {
 
-  let randomRiddle = riddles[Math.floor(Math.random() * riddles.length)];
-  let answer = prompt(randomRiddle.question);
+            combatLog.innerHTML += `<div>${boss.name} est vaincu ! Les héros gagnent !</div>` 
+            nextRoundButton.disabled = true 
 
-  if (answer && answer.toLowerCase() === randomRiddle.answer.toLowerCase()) {
-      updateGameLog("Bravo ! Vous avez vaincu le boss avec l'énigme !");
-  } else {
-      updateGameLog("Mauvaise réponse. Vous avez perdu.");
-  }
-}
+            return 
 
-// Fonction pour mettre à jour les barres de vie et ressources
-function updateStatusBars() {
-  heroes.forEach(hero => {
-      let healthBar = document.getElementById(`health-bar-${hero.name}`);
-      if (healthBar) {
-          healthBar.style.width = `${(hero.health / 50) * 100}%`;
-      }
-      if (hero.role === 'guerrier') {
-          let rageBar = document.getElementById(`rage-bar-${hero.name}`);
-          if (rageBar) {
-              rageBar.style.width = `${(hero.rage / 4) * 100}%`;
-          }
-      } else if (hero.role === 'mage') {
-          let manaBar = document.getElementById(`mana-bar-${hero.name}`);
-          if (manaBar) {
-              manaBar.style.width = `${(hero.mana / 7) * 100}%`;
-          }
-      } else if (hero.role === 'archer') {
-          let arrowsBar = document.getElementById(`arrows-bar-${hero.name}`);
-          if (arrowsBar) {
-              arrowsBar.style.width = `${(hero.arrows / 6) * 100}%`;
-          }
-      }
-  });
+        }
 
-  let bossHealthBar = document.getElementById('health-bar-boss');
-  if (bossHealthBar) {
-      bossHealthBar.style.width = `${(currentBoss.health / 200) * 100}%`;
-  }
-}
+        // Le boss attaque
 
-function updateGameLog(message) {
-  let gameLog = document.getElementById('game-log');
-  gameLog.innerHTML += `<p>${message}</p>`;
-}
+        for (let hero of Object.values(heroes)) {
+            
+            if (hero.health > 0) combatLog.innerHTML += boss.attackHero(hero) 
 
-// Attacher l'événement pour la création des héros
+        }
 
-document.getElementById('create-heroes-form').addEventListener('submit', function(event) {
-  event.preventDefault()
-  distributeStats()
+        // Vérifier si tous les héros sont morts
+
+        if (Object.values(heroes).every((hero) => hero.health <= 0)) {
+
+            combatLog.innerHTML += `<div>Tous les héros sont morts... Le boss gagne !</div>` 
+
+            nextRoundButton.disabled = true 
+
+            return 
+
+        }
+
+        // Mise à jour des points de vie
+
+        updateStatus(heroes, boss)
+
+        round++ 
+
+    })
+
 })
