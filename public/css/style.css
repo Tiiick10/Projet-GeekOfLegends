@@ -138,16 +138,19 @@ select {
 }
 
 .health-bar span {
+  
   display: block;
   height: 100%;
-  background-color: #76c7c0; /* Couleur de la barre de vie */
+  background-color: #76c7c0;
   border-radius: 8px;
   transition: width 0.3s ease;
+
 }
 
 /* Journal de combat */
 
 #combat-log {
+
   margin-top: 20px;
   font-size: 1.2em;
   color: #333;
@@ -158,17 +161,21 @@ select {
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
+
 }
 
 /* Bouton de tour suivant */
 
 #next-round {
+
   margin-top: 20px;
+
 }
 
 /* Randomizer pour les stats */
 
 #randomize-stats, #randomize-names, #start-game, button {
+
   background-color: #FFDD00;
   color: black;
   border: none;
@@ -177,9 +184,11 @@ select {
   cursor: pointer;
   border-radius: 5px;
   margin-top: 10px;
+
 }
 
 #start-game {
+
   background-color: red;
   color: black;
   border: none;
@@ -188,6 +197,7 @@ select {
   cursor: pointer;
   border-radius: 5px;
   margin-top: 10px;
+
 }
 
 /* Animation de barre de vie */
@@ -202,5 +212,27 @@ select {
 }
 
 .health-bar span.damage {
+
   animation: damage 0.3s ease;
+
+}
+
+/* Boss bar */
+
+#boss-health-bar {
+  width: 100%; 
+  background-color: #ff4c4c; 
+  height: 20px; 
+  border-radius: 5px;
+}
+
+/* Heroes bar */
+
+#guerrier-health-bar, #mage-health-bar, #archer-health-bar {
+
+width: 100%; 
+background-color: #76c7c0; 
+height: 20px; 
+border-radius: 5px;
+
 }
