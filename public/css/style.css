@@ -157,3 +157,20 @@ progress {
 #next-round {
   margin-top: 20px;
 }
+
+/* Randomizer pour les stats */
+
+#randomize-stats {
+  background-color: #f39c12;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+#randomize-stats:hover {
+  background-color: #e67e22;
+}
