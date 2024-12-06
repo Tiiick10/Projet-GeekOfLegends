@@ -233,34 +233,42 @@ document.getElementById('start-game').addEventListener('click', () => {
 
     let combatLog = document.getElementById('combat-log') 
     let nextRoundButton = document.getElementById('next-round') 
+    let round = 1
 
     nextRoundButton.addEventListener('click', function nextRound() {
+        combatLog.innerHTML = `<div>--- Tour ${round} ---</div>`
 
-        combatLog.innerHTML = `<div>--- Tour ${round} ---</div>` 
+        // Attaque des héros
 
         for (let hero of Object.values(heroes)) {
-            if (hero.health > 0) combatLog.innerHTML += hero.attackBoss(boss) 
+            if (hero.health > 0) combatLog.innerHTML += hero.attackBoss(boss)
         }
+
+        // Vérifier si le boss est vaincu
 
         if (boss.health <= 0) {
-            combatLog.innerHTML += `<div>${boss.name} est vaincu ! Les héros gagnent !</div>` 
-            nextRoundButton.disabled = true 
-            return 
+            combatLog.innerHTML += `<div>${boss.name} est vaincu ! Les héros gagnent !</div>`
+            nextRoundButton.disabled = true
+            return
         }
 
-        for (let hero of Object.values(heroes)) {
-            if (hero.health > 0) combatLog.innerHTML += boss.attackHero(hero) 
-        }
+        // Le boss attaque un héros aléatoirement
+
+        combatLog.innerHTML += boss.attackHeroRandomly(heroes)
+
+        // Vérifier si tous les héros sont morts
 
         if (Object.values(heroes).every((hero) => hero.health <= 0)) {
-            combatLog.innerHTML += `<div>Tous les héros sont morts... Le boss gagne !</div>` 
-            nextRoundButton.disabled = true 
-            return 
+            combatLog.innerHTML += `<div>Tous les héros sont morts... Le boss gagne !</div>`
+            nextRoundButton.disabled = true
+            return
         }
 
-        updateStatus(heroes, boss) 
+        // Mise à jour des points de vie
 
-        round++ 
+        updateStatus(heroes, boss)
+
+        round++;
     }) 
 }) 
 
