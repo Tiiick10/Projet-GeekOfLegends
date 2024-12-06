@@ -42,12 +42,12 @@ class Boss {
 
         // Filtrer les héros encore en vie
 
-        const aliveHeroes = Object.values(heroes).filter((hero) => hero.health > 0);
+        let aliveHeroes = Object.values(heroes).filter((hero) => hero.health > 0);
         if (aliveHeroes.length === 0) return `<div>Il n'y a plus de héros à attaquer.</div>`;
 
         // Choisir un héros au hasard
         
-        const targetHero = aliveHeroes[Math.floor(Math.random() * aliveHeroes.length)];
+        let targetHero = aliveHeroes[Math.floor(Math.random() * aliveHeroes.length)];
         targetHero.health = Math.max(0, targetHero.health - this.attack);
 
         return `<div>${this.name} attaque ${targetHero.name} et inflige ${this.attack} dégâts.</div>`;
@@ -69,19 +69,19 @@ function createBoss() {
 // Randomisation des statistiques des héros
 
 function randomizeHeroStats() {
-    const minHealth = 30 
-    const maxHealth = 100 
-    const minAttack = 5 
-    const maxAttack = 25 
+    let minHealth = 1 
+    let maxHealth = 50 
+    let minAttack = 1 
+    let maxAttack = 40
 
-    const randomStats = () => ({
+    let randomStats = () => ({
         health: Math.floor(Math.random() * (maxHealth - minHealth + 1)) + minHealth,
         attack: Math.floor(Math.random() * (maxAttack - minAttack + 1)) + minAttack,
     }) 
 
-    const guerrierStats = randomStats() 
-    const mageStats = randomStats() 
-    const archerStats = randomStats() 
+    let guerrierStats = randomStats() 
+    let mageStats = randomStats() 
+    let archerStats = randomStats() 
 
     document.getElementById('guerrier-hp').value = guerrierStats.health 
     document.getElementById('guerrier-attack').value = guerrierStats.attack 
@@ -92,6 +92,40 @@ function randomizeHeroStats() {
     document.getElementById('archer-hp').value = archerStats.health 
     document.getElementById('archer-attack').value = archerStats.attack 
 }
+
+// Fonction pour randomiser les noms des héros
+
+function randomizeHeroNames() {
+
+    const getRandomName = (role) => {
+
+        const names = {
+
+            guerrier: ['Thorgal', 'Bjorn', 'Ragnar', 'Ulf', 'Einar'],
+            mage: ['Merlin', 'Gandalf', 'Morgane', 'Saroumane', 'Radagast'],
+            archer: ['Robin', 'Legolas', 'Sylvain', 'Hawkeye', 'Artemis']
+
+        }
+
+        const roleNames = names[role]
+
+        return roleNames[Math.floor(Math.random() * roleNames.length)]
+
+    }
+
+    // Assigner des noms aléatoires aux champs des héros
+
+    document.getElementById('guerrier-name').value = getRandomName('guerrier')
+    document.getElementById('mage-name').value = getRandomName('mage')
+    document.getElementById('archer-name').value = getRandomName('archer')
+
+}
+
+// Bouton de randomisation des noms
+
+document.getElementById('randomize-names').addEventListener('click', randomizeHeroNames)
+
+
 
 // Mise à jour des barres de vie avec vérification
 

@@ -12,7 +12,7 @@
     </header>
 
     <main>
-        
+
         <!-- Création des héros -->
 
         <section id="hero-creation" aria-label="Création des héros">
@@ -86,6 +86,7 @@
             <!-- Boutons -->
 
             <button id="randomize-stats">Randomiser les Stats</button>
+            <button id="randomize-names">Randomiser les noms</button>
             <button id="start-game">Démarrer le Jeu</button>
         </section>
 
@@ -93,6 +94,25 @@
 
         <section id="game-board" aria-label="Tableau de jeu" style="display: none;">
             <h2>Combat</h2>
+
+            <!-- Section des points de vie -->
+
+            <div id="status-section" style="display: flex; justify-content: space-between; padding: 10px;">
+
+                <div id="heroes-status">
+
+                    <!-- PDV Héros ici -->
+
+                </div>
+
+                <div id="boss-status">
+
+                    <!-- PDV Boss ici -->
+
+                </div>
+
+            </div>
+
             <div id="combat-info"></div>
             <div id="combat-log" aria-live="polite"></div>
             <button id="next-round">Tour suivant</button>
