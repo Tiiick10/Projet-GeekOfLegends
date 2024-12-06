@@ -8,14 +8,11 @@
 </head>
 <body>
     <header>
-
         <h1>Welcome to GeekOfLegends</h1>
-
     </header>
 
-
     <main>
-
+        
         <!-- Création des héros -->
 
         <section id="hero-creation" aria-label="Création des héros">
@@ -38,10 +35,8 @@
                     <input type="number" id="guerrier-attack" min="1" placeholder="Points d'attaque du Guerrier">
                     <label for="guerrier-posture">Posture :</label>
                     <select id="guerrier-posture">
-
                         <option value="attaque">Attaque (+25% de degats)</option>
                         <option value="défense">Défense (50% des dégats sont réduits)</option>
-
                     </select>
 
                 </div>
@@ -60,10 +55,8 @@
                     <input type="number" id="mage-attack" min="1" placeholder="Points d'attaque du Mage">
                     <label for="mage-posture">Posture :</label>
                     <select id="mage-posture">
-
                         <option value="attaque">Attaque (+25% de degats)</option>
                         <option value="défense">Défense (50% des dégats sont réduits)</option>
-
                     </select>
 
                 </div>
@@ -80,39 +73,30 @@
                     <input type="number" id="archer-hp" min="1" placeholder="Points de vie de l'Archer">
                     <label for="archer-attack">Points d'attaque :</label>
                     <input type="number" id="archer-attack" min="1" placeholder="Points d'attaque de l'Archer">
-
                     <label for="archer-posture">Posture :</label>
-
                     <select id="archer-posture">
-
                         <option value="attaque">Attaque (+25% de degats)</option>
                         <option value="défense">Défense (50% des dégats sont réduits)</option>
-
                     </select>
 
                 </div>
 
             </div>
 
-            <button id="start-game">Démarrer le Jeu</button>
+            <!-- Boutons -->
 
+            <button id="randomize-stats">Randomiser les Stats</button>
+            <button id="start-game">Démarrer le Jeu</button>
         </section>
 
         <!-- Section du jeu -->
 
-        <section id="game-board" aria-label="Tableau de jeu">
-
+        <section id="game-board" aria-label="Tableau de jeu" style="display: none;">
             <h2>Combat</h2>
-
-            <div id="combat-info"> </div>
-
+            <div id="combat-info"></div>
             <div id="combat-log" aria-live="polite"></div>
-
             <button id="next-round">Tour suivant</button>
-
         </section>
-        
-
     </main>
 
     <script src="./public/js/main.js"></script>
