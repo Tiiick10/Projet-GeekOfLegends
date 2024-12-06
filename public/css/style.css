@@ -39,7 +39,7 @@ section {
 }
 
 .hero-column {
-  width: 30%; 
+  width: 30%;
   padding: 15px;
   background-color: #ffffff;
   border: 1px solid #ddd;
@@ -67,14 +67,33 @@ select {
   border-radius: 5px;
 }
 
-
 /* Section de combat */
 
 #combat-info {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;  
+  flex-wrap: wrap;
+}
+
+#status-section {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#heroes-status,
+#boss-status {
+  width: 45%;
+  background-color: #ffffff;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .status-box {
@@ -82,46 +101,49 @@ select {
   padding: 10px;
   border-radius: 8px;
   text-align: center;
-  width: 30%;
   margin: 10px 0;
 }
 
-#boss-status {
-  padding: 10px;
-  color: black;
-  border-radius: 8px;
+#boss-status h3,
+#heroes-status h3 {
+  font-size: 1.2em;
+  color: #3B3B3B;
+}
+
+/* Style pour les points de vie */
+
+.hero-status,
+.boss-status {
+  margin: 10px 0;
+  text-align: left;
+}
+
+.hero-status p,
+.boss-status p {
+  margin: 5px 0;
+  font-size: 1em;
+  color: #333;
+}
+
+/* Style des barres de vie */
+
+.health-bar {
+  height: 15px;
   width: 100%;
-  margin-top: 20px;
+  background-color: #ddd;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  margin-top: 5px;
 }
 
-
-/* Style pour le conteneur principal des héros */
-
-#hero-container {
-  display: flex;
-  gap: 20px;
-  justify-content: center; 
-  align-items: center;
+.health-bar span {
+  display: block;
+  height: 100%;
+  background-color: #76c7c0; /* Couleur de la barre de vie */
+  border-radius: 8px;
+  transition: width 0.3s ease;
 }
-
-/* Style pour chaque héros */
-
-.hero-status {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center; 
-  gap: 5px;
-}
-
-/* Style pour les barres */
-
-progress {
-  width: 100px;
-  height: 20px;
-  background-color: #ccc;
-}
-
 
 /* Journal de combat */
 
@@ -155,7 +177,6 @@ progress {
   cursor: pointer;
   border-radius: 5px;
   margin-top: 10px;
-  gap: 20px;
 }
 
 #start-game {
@@ -167,5 +188,19 @@ progress {
   cursor: pointer;
   border-radius: 5px;
   margin-top: 10px;
-  gap: 20px;
+}
+
+/* Animation de barre de vie */
+
+@keyframes damage {
+  from {
+    background-color: #76c7c0;
+  }
+  to {
+    background-color: #f77;
+  }
+}
+
+.health-bar span.damage {
+  animation: damage 0.3s ease;
 }
