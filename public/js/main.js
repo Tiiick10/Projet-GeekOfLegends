@@ -2,98 +2,115 @@
 
 class Hero {
 
-  constructor(name, hp, attack, role, posture, maxRessource) {
+  constructor(name, hp, attack, role, posture, maxRessource, element) {
 
-    this.name = name 
-    this.health = hp 
-    this.maxHp = hp 
-    this.attack = attack 
-    this.role = role 
-    this.posture = posture 
-    this.maxResource = maxRessource
-    this.rage = 0  // Guerrier
-    this.mana = 7  // Mage
-    this.arrows = 6  // Archer
+    this.name = name;
+    this.health = hp;
+    this.maxHp = hp;
+    this.attack = attack;
+    this.role = role;
+    this.posture = posture;
+    this.maxResource = maxRessource;
+    this.rage = 0; // Guerrier
+    this.mana = 7; // Mage
+    this.arrows = 6; // Archer
+    this.element = element || null;
 
     // Ressources spécifiques aux héros
 
     if (role === "guerrier") {
-        this.maxResource = 4 
-        this.rage = 0
-      } else if (role === "mage") {
-        this.maxResource = 7 
-        this.mana = 7
-      } else (role === "archer"); {
-        this.maxResource = 6
-        this.arrows = 6
-      }
+      this.maxResource = 4;
+      this.rage = 0;
+    } else if (role === "mage") {
+      this.maxResource = 7;
+      this.mana = 7;
+    } else if (role === "archer") {
+      this.maxResource = 6;
+      this.arrows = 6;
+    }
   }
 
   attackBoss(boss) {
 
-    let damage = this.attack 
-  
-    if (this.posture === "attaque") damage *= 1.2 
-    if (this.posture === "défense") damage *= 0.5 
-  
+    let damage = this.attack;
+
+    if (this.posture === "attaque") damage *= 1.2;
+    if (this.posture === "défense") damage *= 0.5;
+
     // Guerrier : Gagner 25% de dégâts s'il a 4 points de rage
 
     if (this.role === "guerrier" && this.rage >= 4) {
-      damage *= 1.25 
-      this.rage = 0   // Réinitialiser la rage après utilisation
+      damage *= 1.25;
+      this.rage = 0; // Réinitialiser la rage après utilisation
     }
-  
+
     // Attaque critique de l'archer
 
     if (this.role === "archer" && this.arrows >= 2) {
-
-      this.arrows -= 2   // Consommer 2 flèches pour l'attaque critique
-  
+      this.arrows -= 2; // Consommer 2 flèches pour l'attaque critique
       if (Math.random() < 0.25) {
-
-        damage *= 1.5   // Attaque critique avec un multiplicateur de dégâts
+        damage *= 1.5; // Attaque critique avec un multiplicateur de dégâts
       }
     } else if (this.role === "archer" && this.arrows < 2) {
-
-      // Si l'archer n'a pas assez de flèches, il récupère 6 nouvelles flèches
-
-      this.arrows += 6 
-      this.arrows = Math.min(this.arrows, this.maxResource)   // Limiter à 6 flèches maximum
-      return `<div>${this.name} n'a pas assez de flèches et génère 6 nouvelles flèches.</div>` 
+    
+      this.arrows += 6;
+      this.arrows = Math.min(this.arrows, this.maxResource); // Limiter à 6 flèches maximum
+      return `<div>${this.name} n'a pas assez de flèches et génère 6 nouvelles flèches.</div>`;
     }
-  
+
     // Vérification de l'attaque du Mage avec mana
 
     if (this.role === "mage") {
-
       if (this.mana >= 2) {
-
-        this.mana -= 2 
-
+        this.mana -= 2;
       } else {
+        this.mana += 7; // Récupère 7 points de mana si il (elle) est en manque
+        this.mana = Math.min(this.mana, this.maxResource); // Empêche de dépasser le mana max (7)
+        return `<div>${this.name} n'a pas assez de mana et génère 7 points de mana.</div>`;
+      }
 
-        this.mana += 7   // Récupère 7 points de mana si il (elle) est en manque
-        this.mana = Math.min(this.mana, this.maxResource)  // Empêche de dépasser le mana max (7)
-        return `<div>${this.name} n'a pas assez de mana et génère 7 points de mana.</div>` 
+      // Calcul de l'avantage élémentaire du Mage
+
+      if (this.element && boss.element) {
+        damage = this.applyElementalAdvantage(damage, this.element, boss.element);
       }
     }
-  
+
     // Appliquer les dégâts au boss
 
-    boss.health = Math.max(0, boss.health - damage) 
-  
-    return `<div>${this.name} attaque ${boss.name} et inflige ${damage.toFixed(2)} dégâts.</div>` 
+    boss.health = Math.max(0, boss.health - damage);
+
+    return `<div>${this.name} attaque ${boss.name} et inflige ${damage.toFixed(2)} dégâts.</div>`;
   }
-  
 
-// Augmenter la rage du Guerrier à la fin du tour
+  applyElementalAdvantage(damage, heroElement, bossElement) {
 
-increaseRage() {
+    // Feu domine Terre, Terre domine Eau, Eau domine Feu
 
-  if (this.role === "guerrier" && this.rage < 4 && this.health > 0) {
-    this.rage += 1 
+    const elementAdvantages = {
+      Feu: "Terre",
+      Terre: "Eau",
+      Eau: "Feu"
+    };
+
+    if (elementAdvantages[heroElement] === bossElement) {
+
+      damage *= 1.3; // +30% de dégâts si l'élément du Mage domine celui du Boss
+
+    }
+
+    return damage;
   }
-}}
+
+  // Augmenter la rage du Guerrier à la fin du tour
+
+  increaseRage() {
+    if (this.role === "guerrier" && this.rage < 4 && this.health > 0) {
+      this.rage += 1;
+    }
+  }
+}
+
 
 // Verif pour mettre à jour les barres de ressources
 
@@ -127,67 +144,59 @@ function updateHeroResourceBars(heroes) {
 
 
 class Boss {
-
-    constructor(name, hp, attack, element) {
-
-      this.name = name
-      this.health = hp
-      this.maxHp = hp // Stocke les PV max pour la barre
-      this.attack = attack
-      this.element = element
-
-    }
-  
-    attackHeroRandomly(heroes) {
-
-      let aliveHeroes = Object.values(heroes).filter((hero) => hero.health > 0)
-  
-      if (aliveHeroes.length === 0) {
-        return `<div>Il n'y a plus de héros à attaquer.</div>`
-      }
-  
-      let targetHero = aliveHeroes[Math.floor(Math.random() * aliveHeroes.length)]
-      targetHero.health = Math.max(0, targetHero.health - this.attack)
-  
-      return `<div>${this.name} attaque ${targetHero.name} et inflige ${this.attack} dégâts.</div>`
-
-    }
-  
-    // Déclenche l'énigme lorsque la santé du boss est à 20% ou moins
-
-    checkForRiddle() {
-
-      if (this.health <= this.maxHp * 0.2) {
-        return this.askRiddle() 
-      }
-      return ""
-
-    }
-  
-    // Pose une énigme parmi 3 possibles
-
-    askRiddle() {
-
-      const riddles = [
-
-        { question: "Quel est le plus grand nombre premier ?", answer: "infini" },
-        { question: "Je suis pris avant vous, mais je vous suis toujours. Qui suis-je ?", answer: "ombre" },
-        { question: "Je peux remplir une pièce, mais je n'ai pas de volume. Qui suis-je ?", answer: "lumière" },
-
-      ]
-  
-      // Sélection aléatoire d'une énigme
-
-      let randomRiddle = riddles[Math.floor(Math.random() * riddles.length)]
-  
-      return {
-
-        question: randomRiddle.question,
-        correctAnswer: randomRiddle.answer,
-
-      }
-    }
+  constructor(name, hp, attack, element) {
+    this.name = name;
+    this.health = hp;
+    this.maxHp = hp; // Stocke les PV max pour la barre
+    this.attack = attack;
+    this.element = element || null; // Ajout de l'élément pour le Boss
   }
+
+  attackHeroRandomly(heroes) {
+    let aliveHeroes = Object.values(heroes).filter((hero) => hero.health > 0);
+
+    if (aliveHeroes.length === 0) {
+      return `<div>Il n'y a plus de héros à attaquer.</div>`;
+    }
+
+    let targetHero = aliveHeroes[Math.floor(Math.random() * aliveHeroes.length)];
+    targetHero.health = Math.max(0, targetHero.health - this.attack);
+
+    return `<div>${this.name} attaque ${targetHero.name} et inflige ${this.attack} dégâts.</div>`;
+  }
+
+  // Déclenche l'énigme lorsque la santé du boss est à 20% ou moins
+  checkForRiddle() {
+    if (this.health <= this.maxHp * 0.2) {
+      return this.askRiddle();
+    }
+    return "";
+  }
+
+  // Pose une énigme parmi 3 possibles
+
+  askRiddle() {
+
+    const riddles = [
+
+      { question: "Quel est le plus grand nombre premier ?", answer: "infini" },
+      { question: "Je suis pris avant vous, mais je vous suis toujours. Qui suis-je ?", answer: "ombre" },
+      { question: "Je peux remplir une pièce, mais je n'ai pas de volume. Qui suis-je ?", answer: "lumière" }
+
+    ];
+
+
+    // Sélection aléatoire d'une énigme
+
+    let randomRiddle = riddles[Math.floor(Math.random() * riddles.length)];
+
+    return {
+      question: randomRiddle.question,
+      correctAnswer: randomRiddle.answer
+    };
+  }
+}
+
   
 
 // Fonction pour mettre à jour les barres de santé
@@ -331,13 +340,18 @@ document.getElementById("randomize-stats").addEventListener("click", randomizeHe
 // Initialisation du jeu
 
 document.getElementById("start-game").addEventListener("click", () => {
+
   if (
     !document.getElementById("guerrier-name").value ||
     !document.getElementById("mage-name").value ||
-    !document.getElementById("archer-name").value
+    !document.getElementById("archer-name").value ||
+    !document.getElementById("mage-element").value
+
   ) {
-    alert("Veuillez remplir tous les champs des héros.") 
-    return 
+
+    alert("Veuillez remplir tous les champs des héros.");
+    return;
+
   }
 
   let heroes = {
@@ -349,6 +363,7 @@ document.getElementById("start-game").addEventListener("click", () => {
       parseInt(document.getElementById("guerrier-attack").value),
       "guerrier",
       document.getElementById("guerrier-posture").value
+
     ),
 
     mage: new Hero(
@@ -357,7 +372,10 @@ document.getElementById("start-game").addEventListener("click", () => {
       parseInt(document.getElementById("mage-hp").value),
       parseInt(document.getElementById("mage-attack").value),
       "mage",
-      document.getElementById("mage-posture").value
+      document.getElementById("mage-posture").value,
+      "7", // Définit le mana
+      document.getElementById("mage-element").value // L'élément du Mage
+
     ),
 
     archer: new Hero(
@@ -367,10 +385,18 @@ document.getElementById("start-game").addEventListener("click", () => {
       parseInt(document.getElementById("archer-attack").value),
       "archer",
       document.getElementById("archer-posture").value
-    ),
-  } 
+    )
+  };
 
-  let boss = createBoss() 
+  let boss = createBoss();
+
+  // Afficher la section de combat
+
+  document.getElementById("game-board").style.display = "block";
+  updateHealthBars(heroes.guerrier, "guerrier-health-bar");
+  updateHealthBars(heroes.mage, "mage-health-bar");
+  updateHealthBars(heroes.archer, "archer-health-bar");
+  updateHealthBars(boss, "boss-health-bar"); 
 
   // Afficher la section de combat
 
@@ -391,7 +417,7 @@ document.getElementById("start-game").addEventListener("click", () => {
 
   // Fonction pour gérer le tour du boss
 
-function handleBossTurn() {
+  function handleBossTurn() {
 
     // Vérifie si le boss a atteint 20% de sa santé
 
