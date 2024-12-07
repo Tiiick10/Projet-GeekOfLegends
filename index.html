@@ -95,6 +95,7 @@
         <!-- Section du jeu -->
 
         <section id="game-board" aria-label="Tableau de jeu" style="display: none;">
+
             <h2>Combat</h2>
 
             <!-- Section des points de vie -->
@@ -112,6 +113,9 @@
                         <span id="guerrier-name-bar">Guerrier</span>
 
                         <div id="guerrier-health-bar"></div>
+
+                        <div id="guerrier-rage-bar" class="resource-bar">Rage: 0</div>
+                        
                     </div>
 
                     <!-- Barre de vie du Mage -->
@@ -122,6 +126,8 @@
 
                         <div id="mage-health-bar"></div>
 
+                        <div id="mage-mana-bar" class="resource-bar">Mana: 7</div>
+
                     </div>
 
                     <!-- Barre de vie de l'Archer -->
@@ -131,6 +137,8 @@
                         <span id="archer-name-bar">Archer</span>
 
                         <div id="archer-health-bar"></div>
+
+                        <div id="archer-arrows-bar" class="resource-bar">Flèches: 6</div>
 
                     </div>
 
@@ -151,9 +159,15 @@
 
             </div>
 
+
             <div id="combat-info"></div>
+
             <div id="combat-log" aria-live="polite"></div>
+
             <button id="next-round">Tour suivant</button>
+            
+            <button id="restart-button" style="display: none;">Rejouer</button>
+
         </section>
     </main>
 
