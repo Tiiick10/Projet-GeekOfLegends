@@ -32,56 +32,59 @@ class Hero {
   attackBoss(boss) {
 
     let damage = this.attack 
-
+  
     if (this.posture === "attaque") damage *= 1.2 
     if (this.posture === "défense") damage *= 0.5 
-
-   // Guerrier : Gagner 25% de dégâts s'il a 4 points de rage
-
-   if (this.role === "guerrier" && this.rage >= 4) {
-    damage *= 1.25 
-    this.rage = 0  // Réinitialiser la rage après utilisation
-  }
-
-  // Attaque critique de l'archer
   
-  if (this.role === "archer" && this.arrows >= 2) {
-    this.arrows -= 2 
+    // Guerrier : Gagner 25% de dégâts s'il a 4 points de rage
 
-    if (Math.random() < 0.25) {
-      damage *= 1.5 
-
-    } else {
-
-        this.arrows += 6 // Récupère 6 flèches si il (elle) est en manque
-        this.arrows = Math.min (this.arrows, this.maxResource) // Empêche de dépasser le nombre max de flèches (6)
-        return `<div>${this.name} n'a pas assez de flèches et en craft 6 nouvelles`
+    if (this.role === "guerrier" && this.rage >= 4) {
+      damage *= 1.25 
+      this.rage = 0   // Réinitialiser la rage après utilisation
     }
-  }
+  
+    // Attaque critique de l'archer
 
-  // Vérification de l'attaque du Mage avec mana
+    if (this.role === "archer" && this.arrows >= 2) {
 
-  if (this.role === "mage") {
+      this.arrows -= 2   // Consommer 2 flèches pour l'attaque critique
+  
+      if (Math.random() < 0.25) {
 
-    if (this.mana >= 2) {
+        damage *= 1.5   // Attaque critique avec un multiplicateur de dégâts
+      }
+    } else if (this.role === "archer" && this.arrows < 2) {
 
-      this.mana -= 2
+      // Si l'archer n'a pas assez de flèches, il récupère 6 nouvelles flèches
 
-    } else {
-
-      this.mana += 7  // Récupère 7 points de mana si il (elle) est en manque
-      this.mana = Math.min (this.mana, this.maxResource) // Empêche de dépasser le mana max (7)
-      return `<div>${this.name} n'a pas assez de mana et génère 7 points de mana.</div>` 
-
+      this.arrows += 6 
+      this.arrows = Math.min(this.arrows, this.maxResource)   // Limiter à 6 flèches maximum
+      return `<div>${this.name} n'a pas assez de flèches et génère 6 nouvelles flèches.</div>` 
     }
+  
+    // Vérification de l'attaque du Mage avec mana
+
+    if (this.role === "mage") {
+
+      if (this.mana >= 2) {
+
+        this.mana -= 2 
+
+      } else {
+
+        this.mana += 7   // Récupère 7 points de mana si il (elle) est en manque
+        this.mana = Math.min(this.mana, this.maxResource)  // Empêche de dépasser le mana max (7)
+        return `<div>${this.name} n'a pas assez de mana et génère 7 points de mana.</div>` 
+      }
+    }
+  
+    // Appliquer les dégâts au boss
+
+    boss.health = Math.max(0, boss.health - damage) 
+  
+    return `<div>${this.name} attaque ${boss.name} et inflige ${damage.toFixed(2)} dégâts.</div>` 
   }
-
-  // Appliquer les dégâts au boss
-
-  boss.health = Math.max(0, boss.health - damage) 
-
-  return `<div>${this.name} attaque ${boss.name} et inflige ${damage.toFixed(2)} dégâts.</div>` 
-}
+  
 
 // Augmenter la rage du Guerrier à la fin du tour
 
@@ -125,29 +128,67 @@ function updateHeroResourceBars(heroes) {
 
 class Boss {
 
-  constructor(name, hp, attack, element) {
+    constructor(name, hp, attack, element) {
 
-    this.name = name 
-    this.health = hp 
-    this.maxHp = hp  // Stocke les PV max pour la barre
-    this.attack = attack 
-    this.element = element 
+      this.name = name
+      this.health = hp
+      this.maxHp = hp // Stocke les PV max pour la barre
+      this.attack = attack
+      this.element = element
+
+    }
+  
+    attackHeroRandomly(heroes) {
+
+      let aliveHeroes = Object.values(heroes).filter((hero) => hero.health > 0)
+  
+      if (aliveHeroes.length === 0) {
+        return `<div>Il n'y a plus de héros à attaquer.</div>`
+      }
+  
+      let targetHero = aliveHeroes[Math.floor(Math.random() * aliveHeroes.length)]
+      targetHero.health = Math.max(0, targetHero.health - this.attack)
+  
+      return `<div>${this.name} attaque ${targetHero.name} et inflige ${this.attack} dégâts.</div>`
+
+    }
+  
+    // Déclenche l'énigme lorsque la santé du boss est à 20% ou moins
+
+    checkForRiddle() {
+
+      if (this.health <= this.maxHp * 0.2) {
+        return this.askRiddle() 
+      }
+      return ""
+
+    }
+  
+    // Pose une énigme parmi 3 possibles
+
+    askRiddle() {
+
+      const riddles = [
+
+        { question: "Quel est le plus grand nombre premier ?", answer: "infini" },
+        { question: "Je suis pris avant vous, mais je vous suis toujours. Qui suis-je ?", answer: "ombre" },
+        { question: "Je peux remplir une pièce, mais je n'ai pas de volume. Qui suis-je ?", answer: "lumière" },
+
+      ]
+  
+      // Sélection aléatoire d'une énigme
+
+      let randomRiddle = riddles[Math.floor(Math.random() * riddles.length)]
+  
+      return {
+
+        question: randomRiddle.question,
+        correctAnswer: randomRiddle.answer,
+
+      }
+    }
   }
-
-  attackHeroRandomly(heroes) {
-    let aliveHeroes = Object.values(heroes).filter((hero) => hero.health > 0) 
-
-    if (aliveHeroes.length === 0)
-
-      return `<div>Il n'y a plus de héros à attaquer.</div>` 
-
-    let targetHero =
-      aliveHeroes[Math.floor(Math.random() * aliveHeroes.length)] 
-    targetHero.health = Math.max(0, targetHero.health - this.attack) 
-
-    return `<div>${this.name} attaque ${targetHero.name} et inflige ${this.attack} dégâts.</div>` 
-  }
-}
+  
 
 // Fonction pour mettre à jour les barres de santé
 
@@ -173,19 +214,28 @@ function updateHealthBars(entity, healthBarId) {
 
 function createBoss() {
 
-  let bossNames = ["Sauron", "Chronos", "Lilith"] 
-  let bossHealth = Math.floor(Math.random() * 1000) + 50 
-  let bossAttack = Math.floor(Math.random() * 20) + 10 
-  let bossElement = ["Feu", "Glace", "Terre"][Math.floor(Math.random() * 3)] 
+    let bossNames = ["Sauron", "Chronos", "Lilith"] 
+    let bossHealth = Math.floor(Math.random() * 1000) + 50 
+    let bossAttack = Math.floor(Math.random() * 20) + 10 
+    let bossElement = ["Feu", "Glace", "Terre"][Math.floor(Math.random() * 3)] 
+  
+    let boss = new Boss(
 
-  return new Boss(
+      bossNames[Math.floor(Math.random() * bossNames.length)],
+      bossHealth,
+      bossAttack,
+      bossElement
 
-    bossNames[Math.floor(Math.random() * bossNames.length)],
-    bossHealth,
-    bossAttack,
-    bossElement
-  ) 
-}
+    ) 
+  
+    // Mettre à jour le nom du boss dans l'élément HTML
+
+    document.getElementById("boss-name").textContent = boss.name 
+  
+    return boss 
+
+  }
+  
 
 // Randomisation des statistiques des héros
 
@@ -339,6 +389,57 @@ document.getElementById("start-game").addEventListener("click", () => {
 
   // Gestion des tours
 
+  // Fonction pour gérer le tour du boss
+
+function handleBossTurn() {
+
+    // Vérifie si le boss a atteint 20% de sa santé
+
+    const riddleData = boss.checkForRiddle() 
+  
+    if (riddleData) {
+      let attempts = 3 
+      let userAnswer = prompt(riddleData.question)  // Demander à l'utilisateur de répondre à l'énigme
+  
+      while (attempts > 0 && userAnswer.toLowerCase() !== riddleData.correctAnswer.toLowerCase()) {
+        attempts-- 
+
+        if (attempts > 0) {
+
+          userAnswer = prompt(`Mauvaise réponse. Il vous reste ${attempts} tentative(s).`)
+
+        } else {
+            
+          // Echec
+
+          alert("Vous avez échoué à résoudre l'énigme. Les héros sont décimés, vous avez perdu !") 
+          endGame(false)  // Terminer le jeu avec la défaite
+          return 
+        }
+      }
+  
+      if (userAnswer.toLowerCase() === riddleData.correctAnswer.toLowerCase()) {
+
+        alert("Bravo ! Vous avez résolu l'énigme et vaincu le boss !") 
+
+        endGame(true)  // Terminer le jeu avec la victoire
+      }
+    }
+  }
+  
+  // Fonction pour terminer le jeu
+
+  function endGame(victory) {
+    let message = victory ? "Les héros gagnent !" : "Les héros sont décimés, vous avez perdu !" 
+    alert(message) 
+    document.getElementById("combat-log").innerHTML += `<div>${message}</div>` 
+  
+    // Empêcher les actions supplémentaires dans le jeu
+
+    document.getElementById("next-round").disabled = true 
+  }
+  
+
  nextRoundButton.addEventListener("click", function nextRound() {
     combatLog.innerHTML = `<div>--- Tour ${round} ---</div>` 
 
@@ -375,6 +476,10 @@ document.getElementById("start-game").addEventListener("click", () => {
         document.getElementById("game-board").appendChild(replayButton) 
         return 
     }
+
+    // Si le boss a atteint 20% de sa santé, poser l'énigme
+    
+    handleBossTurn()
 
     // Attaque du boss sur un héros aléatoire
 
