@@ -14,6 +14,19 @@ class Hero {
     this.rage = 0  // Guerrier
     this.mana = 7  // Mage
     this.arrows = 6  // Archer
+
+    // Ressources spécifiques aux héros
+
+    if (role === "guerrier") {
+        this.maxResource = 4 
+        this.rage = 0
+      } else if (role === "mage") {
+        this.maxResource = 7 
+        this.mana = 7
+      } else (role === "archer"); {
+        this.maxResource = 6
+        this.arrows = 6
+      }
   }
 
   attackBoss(boss) {
@@ -23,51 +36,63 @@ class Hero {
     if (this.posture === "attaque") damage *= 1.2 
     if (this.posture === "défense") damage *= 0.5 
 
-    // Guerrier : Gagner 25% de dégâts s'il a 4 points de rage
+   // Guerrier : Gagner 25% de dégâts s'il a 4 points de rage
 
-    if (this.role === "guerrier" && this.rage >= 4) {
-      damage *= 1.25 
-      this.rage = 0  // Réinitialiser la rage après utilisation
-    }
-
-    // Attaque critique de l'archer
-
-    if (this.role === "archer" && this.arrows >= 2) {
-      this.arrows -= 2 
-      if (Math.random() < 0.25) {
-        damage *= 1.5 
-      }
-    }
-
-    // Vérification de l'attaque du Mage avec mana
-
-    if (this.role === "mage") {
-      if (this.mana >= 2) {
-        this.mana -= 2 
-      } else {
-        this.mana += 7  // Récupère 7 points de mana s'il n'a pas assez de mana
-
-        return `<div>${this.name} n'a pas assez de mana pour attaquer et récupère 7 points de mana.</div>` 
-      }
-    }
-
-    boss.health = Math.max(0, boss.health - damage)  // Réduit les PV du boss
-
-    return `<div>${this.name} attaque ${boss.name} et inflige ${damage.toFixed(
-      2
-    )} dégâts.</div>` 
+   if (this.role === "guerrier" && this.rage >= 4) {
+    damage *= 1.25 
+    this.rage = 0  // Réinitialiser la rage après utilisation
   }
 
-  // Augmenter la rage du Guerrier à la fin du tour
+  // Attaque critique de l'archer
+  
+  if (this.role === "archer" && this.arrows >= 2) {
+    this.arrows -= 2 
 
-  increaseRage() {
-    if (this.role === "guerrier" && this.rage < 4) {
-      this.rage += 1  // Augmente de 1 point de rage chaque tour
+    if (Math.random() < 0.25) {
+      damage *= 1.5 
+
+    } else {
+
+        this.arrows += 6 // Récupère 6 flèches si il (elle) est en manque
+        this.arrows = Math.min (this.arrows, this.maxResource) // Empêche de dépasser le nombre max de flèches (6)
+        return `<div>${this.name} n'a pas assez de flèches et en craft 6 nouvelles`
     }
   }
+
+  // Vérification de l'attaque du Mage avec mana
+
+  if (this.role === "mage") {
+
+    if (this.mana >= 2) {
+
+      this.mana -= 2
+
+    } else {
+
+      this.mana += 7  // Récupère 7 points de mana si il (elle) est en manque
+      this.mana = Math.min (this.mana, this.maxResource) // Empêche de dépasser le mana max (7)
+      return `<div>${this.name} n'a pas assez de mana et génère 7 points de mana.</div>` 
+
+    }
+  }
+
+  // Appliquer les dégâts au boss
+
+  boss.health = Math.max(0, boss.health - damage) 
+
+  return `<div>${this.name} attaque ${boss.name} et inflige ${damage.toFixed(2)} dégâts.</div>` 
 }
 
-// Fonction pour mettre à jour les barres de ressources
+// Augmenter la rage du Guerrier à la fin du tour
+
+increaseRage() {
+
+  if (this.role === "guerrier" && this.rage < 4 && this.health > 0) {
+    this.rage += 1 
+  }
+}}
+
+// Verif pour mettre à jour les barres de ressources
 
 function updateResourceBar(resourceValue, maxResource, resourceBarId) {
     let resourceBar = document.getElementById(resourceBarId) 
@@ -85,10 +110,18 @@ function updateResourceBar(resourceValue, maxResource, resourceBarId) {
 // Mise à jour des barres de ressources spécifiques des héros
 
 function updateHeroResourceBars(heroes) {
-    updateResourceBar(heroes.guerrier.rage, heroes.guerrier.maxResource, "guerrier-rage-bar") 
-    updateResourceBar(heroes.mage.mana, heroes.mage.maxResource, "mage-mana-bar") 
-    updateResourceBar(heroes.archer.arrows, heroes.archer.maxResource, "archer-arrows-bar") 
+
+    if (heroes.guerrier) {
+        updateResourceBar(heroes.guerrier.rage, heroes.guerrier.maxResource, "guerrier-rage-bar") 
+    }
+    if (heroes.mage) {
+        updateResourceBar(heroes.mage.mana, heroes.mage.maxResource, "mage-mana-bar") 
+    }
+    if (heroes.archer) {
+        updateResourceBar(heroes.archer.arrows, heroes.archer.maxResource, "archer-arrows-bar") 
+    }
 }
+
 
 class Boss {
 
@@ -105,6 +138,7 @@ class Boss {
     let aliveHeroes = Object.values(heroes).filter((hero) => hero.health > 0) 
 
     if (aliveHeroes.length === 0)
+
       return `<div>Il n'y a plus de héros à attaquer.</div>` 
 
     let targetHero =
@@ -118,6 +152,7 @@ class Boss {
 // Fonction pour mettre à jour les barres de santé
 
 function updateHealthBars(entity, healthBarId) {
+
   let healthBar = document.getElementById(healthBarId) 
 
   if (!healthBar) {
@@ -138,7 +173,7 @@ function updateHealthBars(entity, healthBarId) {
 
 function createBoss() {
 
-  let bossNames = ["Le Dragon", "Le Géant", "L'Archimage"] 
+  let bossNames = ["Sauron", "Chronos", "Lilith"] 
   let bossHealth = Math.floor(Math.random() * 1000) + 50 
   let bossAttack = Math.floor(Math.random() * 20) + 10 
   let bossElement = ["Feu", "Glace", "Terre"][Math.floor(Math.random() * 3)] 
@@ -213,11 +248,26 @@ function randomizeHeroNames() {
     let roleNames = names[role] 
 
     return roleNames[Math.floor(Math.random() * roleNames.length)] 
-  } 
+  }
 
-  document.getElementById("guerrier-name").value = getRandomName("guerrier") 
-  document.getElementById("mage-name").value = getRandomName("mage") 
-  document.getElementById("archer-name").value = getRandomName("archer") 
+  // Récupérer le nom aléatoire pour chaque héros et les afficher
+
+  let guerrierName = getRandomName("guerrier")
+  let mageName = getRandomName("mage")
+  let archerName = getRandomName("archer")
+
+  // Mettre les noms aléatoires dans les div correspondantes
+
+  document.getElementById("guerrier-name-display").textContent = guerrierName
+  document.getElementById("mage-name-display").textContent = mageName
+  document.getElementById("archer-name-display").textContent = archerName
+
+  // Mise à jour des noms dans les champs de formulaire
+
+  document.getElementById("guerrier-name").value = guerrierName
+  document.getElementById("mage-name").value = mageName
+  document.getElementById("archer-name").value = archerName
+
 }
 
 // Bouton de randomisation des noms
@@ -289,10 +339,11 @@ document.getElementById("start-game").addEventListener("click", () => {
 
   // Gestion des tours
 
-nextRoundButton.addEventListener("click", function nextRound() {
+ nextRoundButton.addEventListener("click", function nextRound() {
     combatLog.innerHTML = `<div>--- Tour ${round} ---</div>` 
 
     // Attaque des héros
+
     for (let hero of Object.values(heroes)) {
         if (hero.health > 0) {
             combatLog.innerHTML += hero.attackBoss(boss) 
@@ -300,6 +351,7 @@ nextRoundButton.addEventListener("click", function nextRound() {
     }
 
     // Vérifier si le boss est vaincu
+
     if (boss.health <= 0) {
         combatLog.innerHTML += `<div>${boss.name} est vaincu ! Les héros gagnent !</div>` 
         boss.health = 0  // S'assurer que la santé du boss est à 0 après sa défaite
@@ -307,6 +359,7 @@ nextRoundButton.addEventListener("click", function nextRound() {
         nextRoundButton.disabled = true 
 
         // Afficher le bouton pour rejouer
+
         let replayButton = document.createElement("button") 
         replayButton.textContent = "Rejouer" 
         replayButton.addEventListener("click", () => {
@@ -324,21 +377,25 @@ nextRoundButton.addEventListener("click", function nextRound() {
     }
 
     // Attaque du boss sur un héros aléatoire
+
     combatLog.innerHTML += boss.attackHeroRandomly(heroes) 
 
     // Vérifier si tous les héros sont morts
-const allHeroesDead = Object.values(heroes).every(hero => hero.health <= 0);
+
+let allHeroesDead = Object.values(heroes).every(hero => hero.health <= 0)
 
 if (allHeroesDead) {
     combatLog.innerHTML += `<div>Tous les héros sont morts. ${boss.name} a gagné !</div>` 
     nextRoundButton.disabled = true 
 
     // Mettre à jour toutes les barres de santé des héros à 0
+
     for (let heroKey in heroes) {
         updateHealthBars(heroes[heroKey], `${heroKey}-health-bar`) 
     }
 
     // Afficher le bouton pour rejouer
+
     let replayButton = document.createElement("button") 
     replayButton.textContent = "Rejouer" 
     replayButton.addEventListener("click", () => {
@@ -353,20 +410,23 @@ if (allHeroesDead) {
 
     document.getElementById("game-board").appendChild(replayButton) 
     return 
-    
+
     }
 
 
     // Mise à jour des barres de santé
+
     updateHealthBars(heroes.guerrier, "guerrier-health-bar") 
     updateHealthBars(heroes.mage, "mage-health-bar") 
     updateHealthBars(heroes.archer, "archer-health-bar") 
     updateHealthBars(boss, "boss-health-bar") 
 
     // Mise à jour des barres de ressources après chaque tour
+
     updateHeroResourceBars(heroes) 
 
     // Augmenter la rage du Guerrier après chaque tour
+
     heroes.guerrier.increaseRage() 
 
     round++ 
