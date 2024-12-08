@@ -87,7 +87,7 @@ class Hero {
 
     // Feu domine Terre, Terre domine Eau, Eau domine Feu
 
-    const elementAdvantages = {
+    let elementAdvantages = {
       Feu: "Terre",
       Terre: "Eau",
       Eau: "Feu"
@@ -177,7 +177,7 @@ class Boss {
 
   askRiddle() {
 
-    const riddles = [
+    let riddles = [
 
       { question: "Quel est le plus grand nombre premier ?", answer: "infini" },
       { question: "Je suis pris avant vous, mais je vous suis toujours. Qui suis-je ?", answer: "ombre" },
@@ -421,7 +421,7 @@ document.getElementById("start-game").addEventListener("click", () => {
 
     // Vérifie si le boss a atteint 20% de sa santé
 
-    const riddleData = boss.checkForRiddle() 
+    let riddleData = boss.checkForRiddle() 
   
     if (riddleData) {
       let attempts = 3 
